@@ -12,6 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 public class CurrencyController {
     private final CurrencyService currencyService;
+    private final FreeCurrencyApi freeCurrencyApi;
 
     @PostMapping
     public void addCurrency(@RequestBody CurrencyAddingRequest currencyAddingRequest){
@@ -22,6 +23,8 @@ public class CurrencyController {
     @GetMapping("/ping")
     @ResponseBody
     public List<Currency> getAllCurrencies(){
+        freeCurrencyApi.getRates();
+
        return  currencyService.getAllCurrencies();
     }
 }
