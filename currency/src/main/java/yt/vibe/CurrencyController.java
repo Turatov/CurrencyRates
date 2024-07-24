@@ -1,5 +1,6 @@
 package yt.vibe;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +23,7 @@ public class CurrencyController {
 
     @GetMapping("/ping")
     @ResponseBody
-    public List<Currency> getAllCurrencies(){
+    public List<Currency> getAllCurrencies() throws JsonProcessingException {
         freeCurrencyApi.getRates();
 
        return  currencyService.getAllCurrencies();

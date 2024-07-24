@@ -2,6 +2,7 @@ package yt.vibe;
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Getter;
@@ -9,6 +10,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Getter
@@ -25,19 +31,16 @@ public class FreeCurrencyApi {
     }
 
 //List<Map<String,Double>>
-    public void getRates(){
-        ObjectMapper mapper = new ObjectMapper();
+    public void getRates() throws JsonProcessingException {
+        List<Map<String,Double>> ratesResponce = new ArrayList<>();
+        ObjectMapper objectMapper = new ObjectMapper();
+        String jSon = restTemplate.getForObject(getBaseUrl(),String.class);
+//        Map<String, Object> result = null;
         try {
-          String response = restTemplate.getForObject(getBaseUrl(), String.class);
-            JsonNode obj = mapper.readTree(response);
-            System.out.println("Response: " + obj.get("data"));
-//            return response;
-        } catch (HttpClientErrorException | JsonProcessingException e) {
-            System.err.println("Error: " + e.getMessage());
-        }
-//        return response;
+            Map<String, Map<String, Double>> currencyMap = objectMapper.readValue(jSon, new TypeReference<Map<String, Map<String, Double>>>(){});
+        System.out.println(currencyMap.get("data").get("EUR"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        } // исключения под контролем
     }
-
-
-
 }
