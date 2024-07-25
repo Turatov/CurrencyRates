@@ -1,8 +1,10 @@
-package yt.vibe;
+package yt.vibe.Service;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import yt.vibe.currency.CurrencyAddingRequest;
+import yt.vibe.Currency;
+import yt.vibe.CurrencyAddingRequest;
+import yt.vibe.CurrencyRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -20,8 +22,8 @@ public class CurrencyService {
                 .build());
     }
 
-    public List<Currency> getAllCurrencies(){
-      return   currencyRepository.findAll();
+    public List<Currency> getAllCurrencies() {
+        return currencyRepository.findAll();
     }
 }
 

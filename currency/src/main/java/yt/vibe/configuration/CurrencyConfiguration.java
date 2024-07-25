@@ -1,11 +1,10 @@
-package yt.vibe;
+package yt.vibe.configuration;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
-import yt.vibe.currency.CurrencyAddingRequest;
-import yt.vibe.currency.CurrencyClient;
+import yt.vibe.Service.CurrencyService;
 
 @Configuration
 public class CurrencyConfiguration {
@@ -18,17 +17,9 @@ public class CurrencyConfiguration {
     }
 
     @Bean
-    public RestTemplate restTemplate(){
+    public RestTemplate restTemplate() {
         return new RestTemplate();
     }
 
-    @Bean
-    public CurrencyClient currencyClient(){
-        return new CurrencyClient() {
-            @Override
-            public void addCurrency(CurrencyAddingRequest currencyAddingRequest) {
-                currencyService.addCurrency(currencyAddingRequest);
-            }
-        };
-    }
+
 }
