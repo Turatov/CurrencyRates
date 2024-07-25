@@ -20,10 +20,11 @@ import java.time.LocalDateTime;
 public class Currency {
 
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    private Long id;
 
+    @Id
     private String name;
     private Double rate;
     private LocalDateTime createdAt;

@@ -2,6 +2,7 @@ package yt.vibe;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import yt.vibe.currency.CurrencyAddingRequest;
 
 import java.time.LocalDateTime;
 import java.util.List;
