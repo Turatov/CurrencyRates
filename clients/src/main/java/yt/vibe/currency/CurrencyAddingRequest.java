@@ -1,4 +1,4 @@
-package yt.vibe;
+package yt.vibe.currency;
 
 public record CurrencyAddingRequest(
      String name,
