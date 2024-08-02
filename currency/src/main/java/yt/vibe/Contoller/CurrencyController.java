@@ -22,23 +22,6 @@ public class CurrencyController {
     private final CurrencyService currencyService;
     private final FreeCurrencyApiService freeCurrencyApiService;
 
-
-    //    @PostMapping
-//    public ResponseEntity<Void> addCurrency(@RequestBody CurrencyAddingRequest currencyAddingRequest) {
-//        log.info("new currency {}", currencyAddingRequest);
-//        try {
-//            System.out.println(currencyAddingRequest + " ++++++++");
-//            currencyService.addCurrency(currencyAddingRequest);
-//        } catch (IllegalStateException e) {
-//
-//            if (!e.getMessage().isEmpty()) {
-//                System.out.println("LOOOOL  " + e.getMessage());
-//                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-//            }
-//        }
-//
-//        return new ResponseEntity<>(HttpStatus.CREATED);
-//    }
     @PostMapping
     public ResponseEntity<String> addCurrency(@RequestBody CurrencyAddingRequest request) {
         try {

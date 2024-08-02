@@ -44,7 +44,6 @@ class CurrencyServiceTest {
         // Given
         Currency currency = new Currency("USD", 20.2);
         CurrencyAddingRequest currencyAddingRequest = new CurrencyAddingRequest(currency.getCode(), currency.getRate());
-//        given(currencyRepository.findByCode(currencyAddingRequest.getCurrency().getCode())).willReturn(Optional.empty());
         // When
         underTest.addCurrency(currencyAddingRequest);
         // Then
