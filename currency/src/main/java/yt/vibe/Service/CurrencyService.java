@@ -2,12 +2,14 @@ package yt.vibe.Service;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import yt.vibe.Currency;
 import yt.vibe.CurrencyAddingRequest;
 import yt.vibe.CurrencyRepository;
 
-import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -15,15 +17,34 @@ public class CurrencyService {
     private final CurrencyRepository currencyRepository;
 
     public void addCurrency(CurrencyAddingRequest currencyAddingRequest) {
+        Optional<Currency> optionalCurrency = currencyRepository.findByCode(currencyAddingRequest.getCurrency().getCode());
+        optionalCurrency.ifPresent(
+                currency -> {
+                    if (currencyAddingRequest.getCurrency().getCode().equals(currency.getCode())) {
+                        throw new IllegalStateException(String.format("Currency with this code [%s] is already exist", currencyAddingRequest.getCurrency().getCode()));
+                    } else
+                        return;
+                }
+        );
         currencyRepository.save(Currency.builder()
-                .name(currencyAddingRequest.name())
-                .rate(currencyAddingRequest.rate())
-                .createdAt(LocalDateTime.now())
+                .code(currencyAddingRequest.getCurrency().getCode())
+                .rate(currencyAddingRequest.getCurrency().getRate())
                 .build());
     }
 
+    public Currency getCurrencyByCode(String code) {
+        Optional<Currency> optionalCurrency = currencyRepository.findByCode(code);
+        System.out.println(optionalCurrency);
+        return optionalCurrency.orElse(new Currency("NULL", 0.0));
+    }
+
+
     public List<Currency> getAllCurrencies() {
         return currencyRepository.findAll();
+    }
+
+    public void updateCurrencyByCode(Currency newCurrency) {
+        currencyRepository.saveOrUpdateCurrency(newCurrency.getCode(), newCurrency.getRate());
     }
 }
 
