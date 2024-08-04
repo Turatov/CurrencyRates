@@ -20,5 +20,10 @@ myapp:
   properties:
     token: "fca_live_lQrLEGyHXAK0mFS5X0h5qNc2myUxh3KR8DtQF65B"
     baseUrl: "https://api.freecurrencyapi.com/v1/latest?apikey=fca_live_lQrLEGyHXAK0mFS5X0h5qNc2myUxh3KR8DtQF65B"
-  
 
+springdoc:
+  api-docs:
+    path: "/v3/api-docs"
+
+  swagger-ui:
+    path: "/swagger-ui.html"

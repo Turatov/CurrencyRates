@@ -1,6 +1,10 @@
 package yt.vibe.Contoller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -32,6 +36,7 @@ public class CurrencyController {
         }
     }
 
+    @Operation(summary = "Get a list of actual rates for currencies ", description = "Returns a list of currencies")
     @GetMapping()
     @ResponseBody
     public List<Currency> getAllCurrencies() throws JsonProcessingException {
@@ -40,7 +45,7 @@ public class CurrencyController {
     }
 
     @GetMapping("/{code}")
-    public ResponseEntity<Currency> getCurrencyByCode(@PathVariable String code) {
+    public ResponseEntity<Currency> getCurrencyByCode(@Parameter(description = "Currency code to be  retrieved", example = "USD") @PathVariable String code) {
         Optional<Currency> currencyByCode = Optional.ofNullable(currencyService.getCurrencyByCode(code));
         return currencyByCode.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
