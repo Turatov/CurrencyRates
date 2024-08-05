@@ -7,12 +7,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import yt.vibe.Currency;
 import yt.vibe.CurrencyAddingRequest;
 import yt.vibe.configuration.PropertiesConfiguration;
 
@@ -27,8 +25,10 @@ import java.util.Map;
 @Service
 public class FreeCurrencyApiService {
 
+
     private final PropertiesConfiguration propertiesConfiguration;
     private final RestTemplate restTemplate;
+    private ObjectMapper objectMapper;
 
     @Autowired
     public FreeCurrencyApiService(PropertiesConfiguration propertiesConfiguration, RestTemplate restTemplate) {
@@ -52,7 +52,7 @@ public class FreeCurrencyApiService {
     private void addAllCurrencies(Map<String, Map<String, Double>> currencies) {
         currencies.get("data").forEach((s, stringDoubleMap) -> {
             try {
-                sendPostRequest((new CurrencyAddingRequest(s, stringDoubleMap)));
+                sendPostRequest(new CurrencyAddingRequest(s, stringDoubleMap));
             } catch (JsonProcessingException e) {
                 throw new RuntimeException(e);
             }
@@ -60,13 +60,11 @@ public class FreeCurrencyApiService {
     }
 
     public void sendPostRequest(CurrencyAddingRequest currencyAddingRequest) throws JsonProcessingException {
-
         String url = "http://localhost:8080/api";
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<CurrencyAddingRequest> entity = new HttpEntity<>(currencyAddingRequest, headers);
-        ResponseEntity<String> response = restTemplate.postForEntity(url, entity, String.class);
-        System.out.println("Response: " + response.getBody());
+        HttpEntity<Currency> entity = new HttpEntity<>(currencyAddingRequest.getCurrency(), headers);
+        System.out.println(entity);
+        restTemplate.put(url, entity);
     }
-
 }
