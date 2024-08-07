@@ -1,19 +1,17 @@
-package yt.vibe.Contoller;
+package yt.vibe.contoller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import yt.vibe.Currency;
-import yt.vibe.CurrencyAddingRequest;
-import yt.vibe.Service.CurrencyService;
-import yt.vibe.Service.FreeCurrencyApiService;
+import yt.vibe.dto.CurrencyAddingRequest;
+import yt.vibe.service.CurrencyService;
+import yt.vibe.service.FreeCurrencyApiService;
 
 import java.util.List;
 import java.util.Optional;

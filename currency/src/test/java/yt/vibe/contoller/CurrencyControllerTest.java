@@ -1,14 +1,9 @@
-package yt.vibe.Contoller;
+package yt.vibe.contoller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sun.xml.bind.v2.TODO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,11 +11,10 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.web.client.RestTemplate;
 import yt.vibe.Currency;
-import yt.vibe.CurrencyAddingRequest;
-import yt.vibe.Service.CurrencyService;
-import yt.vibe.Service.FreeCurrencyApiService;
+import yt.vibe.dto.CurrencyAddingRequest;
+import yt.vibe.service.CurrencyService;
+import yt.vibe.service.FreeCurrencyApiService;
 
 import java.util.ArrayList;
 import java.util.List;

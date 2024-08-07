@@ -1,4 +1,4 @@
-package yt.vibe.Service;
+package yt.vibe.service;
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -11,7 +11,7 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import yt.vibe.Currency;
-import yt.vibe.CurrencyAddingRequest;
+import yt.vibe.dto.CurrencyAddingRequest;
 import yt.vibe.configuration.PropertiesConfiguration;
 
 import java.io.IOException;
