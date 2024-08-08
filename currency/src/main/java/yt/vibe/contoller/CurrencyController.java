@@ -18,12 +18,14 @@ import java.util.Optional;
 
 @RestController
 @Slf4j
-@RequestMapping("api")
+@RequestMapping("api/currencies")
 @AllArgsConstructor
 public class CurrencyController {
     private final CurrencyService currencyService;
     private final FreeCurrencyApiService freeCurrencyApiService;
 
+
+    @Operation(summary = "Add new currency")
     @PostMapping
     public ResponseEntity<String> addCurrency(@RequestBody CurrencyAddingRequest request) {
         try {
@@ -42,12 +44,15 @@ public class CurrencyController {
         return currencyService.getAllCurrencies();
     }
 
+
+    @Operation(summary = "Get a currency by code", description = "Returns a currency by code ")
     @GetMapping("/{code}")
     public ResponseEntity<Currency> getCurrencyByCode(@Parameter(description = "Currency code to be  retrieved", example = "USD") @PathVariable String code) {
         Optional<Currency> currencyByCode = Optional.ofNullable(currencyService.getCurrencyByCode(code));
         return currencyByCode.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    @Operation(summary = "Update a currency by code ", description = "If exist will update, if is not will add ")
     @PutMapping
     public ResponseEntity<Currency> updateCurrencyByCode(@RequestBody Currency newCurrencyData) {
         currencyService.updateCurrencyByCode(newCurrencyData);

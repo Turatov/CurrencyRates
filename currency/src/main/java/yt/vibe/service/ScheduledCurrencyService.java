@@ -13,6 +13,8 @@ import yt.vibe.ScheduledCurrencyRates;
 import yt.vibe.dto.CurrencyAddingRequest;
 import yt.vibe.repository.ScheduleRepository;
 
+import java.time.ZonedDateTime;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -20,16 +22,16 @@ import java.util.List;
 public class ScheduledCurrencyService {
     private final ScheduleRepository scheduleRepository;
     private final CurrencyService currencyService;
-    private final RestTemplate restTemplate;
+    private static RestTemplate restTemplate;
 
     public void addScheduledCurrency(ScheduledCurrencyRates scheduledCurrencyRates) {
         scheduleRepository.save(scheduledCurrencyRates);
     }
 
-    public ResponseEntity<String> syncWithMainTable() {
-        List<ScheduledCurrencyRates> scheduleRepositoryAll = scheduleRepository.findAll();
+    public ResponseEntity<String> syncWithMainTable(ZonedDateTime dateTime) {
+        List<ScheduledCurrencyRates> scheduleRepositoryAll = scheduleRepository.findBydatetimeEquals(dateTime);
+        System.out.println(scheduleRepositoryAll);
         if (!scheduleRepositoryAll.isEmpty()) {
-            System.out.println(scheduleRepositoryAll);
             scheduleRepositoryAll.forEach(c -> {
                 try {
                     sendPutRequest(new CurrencyAddingRequest(c.getCode(), c.getRate()));
@@ -42,7 +44,7 @@ public class ScheduledCurrencyService {
         return ResponseEntity.ok().body("All good");
     }
 
-    public void sendPutRequest(CurrencyAddingRequest currencyAddingRequest) throws JsonProcessingException {
+    public static void sendPutRequest(CurrencyAddingRequest currencyAddingRequest) throws JsonProcessingException {
         String url = "http://localhost:8080/api";
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);

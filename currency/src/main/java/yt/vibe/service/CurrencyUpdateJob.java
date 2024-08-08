@@ -6,8 +6,11 @@ import lombok.NoArgsConstructor;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
+import org.quartz.SchedulerException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.time.ZoneId;
 
 @Data
 @AllArgsConstructor
@@ -19,9 +22,7 @@ public class CurrencyUpdateJob implements Job {
 
     @Override
     public void execute(JobExecutionContext context) throws JobExecutionException {
-//        System.out.println("Updating currency rates...");
         assert scheduledCurrencyService != null;
-        System.out.println(scheduledCurrencyService.syncWithMainTable());
-
+        scheduledCurrencyService.syncWithMainTable(context.getTrigger().getStartTime().toInstant().atZone(ZoneId.systemDefault()));
     }
 }

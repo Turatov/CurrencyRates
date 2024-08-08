@@ -21,11 +21,4 @@ public class CurrencyAddingRequest {
             @JsonProperty("rate") Double rate) {
         this.currency = new Currency(code, rate);
     }
-
-    @Override
-    public String toString() {
-        return "CustomerRegistrationRequest{" +
-                "customer=" + currency +
-                '}';
-    }
 }

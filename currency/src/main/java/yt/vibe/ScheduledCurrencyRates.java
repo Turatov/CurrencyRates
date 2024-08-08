@@ -1,11 +1,16 @@
 package yt.vibe;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import java.time.ZonedDateTime;
 
 @Data
@@ -18,6 +23,7 @@ public class ScheduledCurrencyRates {
     @Id
     private Long id;
 
+    @Getter
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private ZonedDateTime datetime;
 
@@ -34,19 +40,9 @@ public class ScheduledCurrencyRates {
         this.datetime = datetime;
     }
 
-    public ZonedDateTime getDatetime() {
-        return datetime.minusHours(1);
-    }
-
     public void setDatetime(ZonedDateTime datetime) {
         this.datetime = datetime;
     }
 
-    public String getJobName() {
-        return "Job for : " + getDatetime().toString();
-    }
 
-    public String getTriggerName() {
-        return "Trigger for : " + getDatetime().toString();
-    }
 }
