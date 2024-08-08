@@ -1,4 +1,4 @@
-package yt.vibe.Service;
+package yt.vibe.service;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -6,17 +6,15 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 import yt.vibe.Currency;
-import yt.vibe.CurrencyAddingRequest;
-import yt.vibe.CurrencyRepository;
+import yt.vibe.dto.CurrencyAddingRequest;
+import yt.vibe.repository.CurrencyRepository;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.assertj.core.api.InstanceOfAssertFactories.LIST;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;

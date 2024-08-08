@@ -1,4 +1,4 @@
-package yt.vibe.Service;
+package yt.vibe.service;
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -11,7 +11,7 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import yt.vibe.Currency;
-import yt.vibe.CurrencyAddingRequest;
+import yt.vibe.dto.CurrencyAddingRequest;
 import yt.vibe.configuration.PropertiesConfiguration;
 
 import java.io.IOException;
@@ -37,7 +37,6 @@ public class FreeCurrencyApiService {
     }
 
     public void getRates() throws JsonProcessingException {
-        List<Map<String, Double>> ratesResponce = new ArrayList<>();
         ObjectMapper objectMapper = new ObjectMapper();
         String jSon = restTemplate.getForObject(propertiesConfiguration.getBaseUrl(), String.class);
         try {
@@ -52,19 +51,11 @@ public class FreeCurrencyApiService {
     private void addAllCurrencies(Map<String, Map<String, Double>> currencies) {
         currencies.get("data").forEach((s, stringDoubleMap) -> {
             try {
-                sendPostRequest(new CurrencyAddingRequest(s, stringDoubleMap));
+                ScheduledCurrencyService.sendPutRequest(new CurrencyAddingRequest(s, stringDoubleMap));
             } catch (JsonProcessingException e) {
                 throw new RuntimeException(e);
             }
         });
     }
-
-    public void sendPostRequest(CurrencyAddingRequest currencyAddingRequest) throws JsonProcessingException {
-        String url = "http://localhost:8080/api";
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<Currency> entity = new HttpEntity<>(currencyAddingRequest.getCurrency(), headers);
-        System.out.println(entity);
-        restTemplate.put(url, entity);
-    }
 }
+

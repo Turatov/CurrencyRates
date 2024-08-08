@@ -1,4 +1,4 @@
-package yt.vibe;
+package yt.vibe.dto;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonRawValue;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.Getter;
+import yt.vibe.Currency;
 
 @Getter
 @Data
@@ -19,12 +20,5 @@ public class CurrencyAddingRequest {
             @Schema(hidden = true)
             @JsonProperty("rate") Double rate) {
         this.currency = new Currency(code, rate);
-    }
-
-    @Override
-    public String toString() {
-        return "CustomerRegistrationRequest{" +
-                "customer=" + currency +
-                '}';
     }
 }

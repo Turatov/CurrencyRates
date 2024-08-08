@@ -1,13 +1,11 @@
-package yt.vibe.Service;
+package yt.vibe.service;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import yt.vibe.Currency;
-import yt.vibe.CurrencyAddingRequest;
-import yt.vibe.CurrencyRepository;
+import yt.vibe.dto.CurrencyAddingRequest;
+import yt.vibe.repository.CurrencyRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
