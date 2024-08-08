@@ -52,14 +52,14 @@ public class FreeCurrencyApiService {
     private void addAllCurrencies(Map<String, Map<String, Double>> currencies) {
         currencies.get("data").forEach((s, stringDoubleMap) -> {
             try {
-                sendPostRequest(new CurrencyAddingRequest(s, stringDoubleMap));
+                sendPutRequest(new CurrencyAddingRequest(s, stringDoubleMap));
             } catch (JsonProcessingException e) {
                 throw new RuntimeException(e);
             }
         });
     }
 
-    public void sendPostRequest(CurrencyAddingRequest currencyAddingRequest) throws JsonProcessingException {
+    public void sendPutRequest(CurrencyAddingRequest currencyAddingRequest) throws JsonProcessingException {
         String url = "http://localhost:8080/api";
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -68,3 +68,4 @@ public class FreeCurrencyApiService {
         restTemplate.put(url, entity);
     }
 }
+

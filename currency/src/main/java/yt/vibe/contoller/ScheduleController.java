@@ -1,15 +1,15 @@
 package yt.vibe.contoller;
 
 
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.quartz.*;
 import org.quartz.impl.matchers.GroupMatcher;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import yt.vibe.service.CurrencyUpdateJob;
-import yt.vibe.dto.ScheduleRequest;
+import yt.vibe.ScheduledCurrencyRates;
+import yt.vibe.service.ScheduledCurrencyService;
 
 
 import java.util.ArrayList;
@@ -17,14 +17,16 @@ import java.util.Date;
 import java.util.List;
 
 @RestController
-//@RequestMapping("/sch")
+@Slf4j
+@RequestMapping("api/schedule")
+@AllArgsConstructor
 public class ScheduleController {
-
-    @Autowired
+    
     private Scheduler scheduler;
+    private ScheduledCurrencyService scheduledCurrencyService;
 
     @PostMapping
-    public String scheduleJob(@RequestBody ScheduleRequest scheduleRequest) {
+    public String scheduleJob(@RequestBody ScheduledCurrencyRates scheduleRequest) {
         try {
             // Преобразование ZonedDateTime в Date
             Date startDate = Date.from(scheduleRequest.getDatetime().toInstant());
@@ -41,7 +43,9 @@ public class ScheduleController {
                             .withMisfireHandlingInstructionFireNow())
                     .build();
             // Планирование задачи
+            System.out.println(scheduleRequest);
             scheduler.scheduleJob(jobDetail, trigger);
+            scheduledCurrencyService.addScheduledCurrency(scheduleRequest);
 
             return "Job scheduled successfully for " + startDate.toString();
         } catch (SchedulerException e) {
