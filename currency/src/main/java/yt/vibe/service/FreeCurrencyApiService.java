@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import yt.vibe.Currency;
@@ -36,6 +37,7 @@ public class FreeCurrencyApiService {
         this.restTemplate = restTemplate;
     }
 
+    @Scheduled(cron = "0 0 * * * ?")
     public void getRates() throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
         String jSon = restTemplate.getForObject(propertiesConfiguration.getBaseUrl(), String.class);
@@ -51,11 +53,20 @@ public class FreeCurrencyApiService {
     private void addAllCurrencies(Map<String, Map<String, Double>> currencies) {
         currencies.get("data").forEach((s, stringDoubleMap) -> {
             try {
-                ScheduledCurrencyService.sendPutRequest(new CurrencyAddingRequest(s, stringDoubleMap));
+                sendPutRequest(new CurrencyAddingRequest(s, stringDoubleMap));
             } catch (JsonProcessingException e) {
                 throw new RuntimeException(e);
             }
         });
+    }
+
+    public void sendPutRequest(CurrencyAddingRequest currencyAddingRequest) throws JsonProcessingException {
+        String url = "http://localhost:8080/api/currencies";
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<Currency> entity = new HttpEntity<>(currencyAddingRequest.getCurrency(), headers);
+        System.out.println(entity);
+        restTemplate.put(url, entity);
     }
 }
 

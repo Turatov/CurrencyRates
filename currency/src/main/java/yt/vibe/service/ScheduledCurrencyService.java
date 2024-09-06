@@ -22,7 +22,7 @@ import java.util.List;
 public class ScheduledCurrencyService {
     private final ScheduleRepository scheduleRepository;
     private final CurrencyService currencyService;
-    private static RestTemplate restTemplate;
+    private final RestTemplate restTemplate;
 
     public void addScheduledCurrency(ScheduledCurrencyRates scheduledCurrencyRates) {
         scheduleRepository.save(scheduledCurrencyRates);
@@ -44,8 +44,8 @@ public class ScheduledCurrencyService {
         return ResponseEntity.ok().body("All good");
     }
 
-    public static void sendPutRequest(CurrencyAddingRequest currencyAddingRequest) throws JsonProcessingException {
-        String url = "http://localhost:8080/api";
+    public void sendPutRequest(CurrencyAddingRequest currencyAddingRequest) throws JsonProcessingException {
+        String url = "http://localhost:8080/api/currencies";
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<Currency> entity = new HttpEntity<>(currencyAddingRequest.getCurrency(), headers);
