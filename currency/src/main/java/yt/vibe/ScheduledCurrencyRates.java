@@ -29,7 +29,6 @@ public class ScheduledCurrencyRates {
 
 
     @Schema(description = "Unique identifier of the currency", example = "USD")
-//    @Column(unique = true)
     private String code;
     @Schema(description = "Currency rate ", example = "90.8")
     private Double rate;

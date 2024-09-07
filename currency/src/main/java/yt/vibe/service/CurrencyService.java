@@ -32,7 +32,6 @@ public class CurrencyService {
 
     public Currency getCurrencyByCode(String code) {
         Optional<Currency> optionalCurrency = currencyRepository.findByCode(code);
-        System.out.println(optionalCurrency);
         return optionalCurrency.orElse(new Currency("NULL", 0.0));
     }
 

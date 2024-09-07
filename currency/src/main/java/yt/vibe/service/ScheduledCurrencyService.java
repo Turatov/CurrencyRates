@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import yt.vibe.Currency;
 import yt.vibe.ScheduledCurrencyRates;
+import yt.vibe.configuration.PropertiesConfiguration;
 import yt.vibe.dto.CurrencyAddingRequest;
 import yt.vibe.repository.ScheduleRepository;
 
@@ -22,34 +23,34 @@ import java.util.List;
 public class ScheduledCurrencyService {
     private final ScheduleRepository scheduleRepository;
     private final CurrencyService currencyService;
-    private static RestTemplate restTemplate;
+    private RestTemplate restTemplate;
+    PropertiesConfiguration propertiesConfiguration;
 
     public void addScheduledCurrency(ScheduledCurrencyRates scheduledCurrencyRates) {
         scheduleRepository.save(scheduledCurrencyRates);
     }
 
+
+    //Send request to BD needs to
     public ResponseEntity<String> syncWithMainTable(ZonedDateTime dateTime) {
-        List<ScheduledCurrencyRates> scheduleRepositoryAll = scheduleRepository.findBydatetimeEquals(dateTime);
-        System.out.println(scheduleRepositoryAll);
-        if (!scheduleRepositoryAll.isEmpty()) {
-            scheduleRepositoryAll.forEach(c -> {
+        List<ScheduledCurrencyRates> allExistedScheduledCurrencyRates = scheduleRepository.findBydatetimeEquals(dateTime);
+        if (!allExistedScheduledCurrencyRates.isEmpty()) {
+            allExistedScheduledCurrencyRates.forEach(c -> {
                 try {
                     sendPutRequest(new CurrencyAddingRequest(c.getCode(), c.getRate()));
                 } catch (JsonProcessingException e) {
                     throw new RuntimeException(e);
                 }
-
             });
         }
         return ResponseEntity.ok().body("All good");
     }
 
-    public static void sendPutRequest(CurrencyAddingRequest currencyAddingRequest) throws JsonProcessingException {
-        String url = "http://localhost:8080/api";
+    public void sendPutRequest(CurrencyAddingRequest currencyAddingRequest) throws JsonProcessingException {
+        String url = propertiesConfiguration.getPutRequestUri();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<Currency> entity = new HttpEntity<>(currencyAddingRequest.getCurrency(), headers);
-        System.out.println(entity);
         restTemplate.put(url, entity);
     }
 }

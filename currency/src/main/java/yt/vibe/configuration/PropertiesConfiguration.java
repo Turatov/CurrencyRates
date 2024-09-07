@@ -8,9 +8,10 @@ import org.springframework.context.annotation.Configuration;
 @Getter
 @Setter
 @Configuration
-@ConfigurationProperties(prefix = "myapp.properties")
+@ConfigurationProperties(prefix = "project.properties")
 public class PropertiesConfiguration {
     private String baseUrl;
     private String token;
+    private String putRequestUri;
 }
 
