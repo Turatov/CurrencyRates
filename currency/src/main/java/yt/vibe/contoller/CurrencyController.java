@@ -13,6 +13,7 @@ import yt.vibe.dto.CurrencyAddingRequest;
 import yt.vibe.service.CurrencyService;
 import yt.vibe.service.FreeCurrencyApiService;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,7 +28,7 @@ public class CurrencyController {
 
     @Operation(summary = "Add new currency")
     @PostMapping
-    public ResponseEntity<String> addCurrency(@RequestBody CurrencyAddingRequest request) {
+    public ResponseEntity<String> addCurrency(@Valid @RequestBody CurrencyAddingRequest request) {
         try {
             currencyService.addCurrency(request);
             return ResponseEntity.status(HttpStatus.CREATED).body("Currency added successfully");
@@ -54,7 +55,7 @@ public class CurrencyController {
 
     @Operation(summary = "Update a currency by code ", description = "If exist will update, if is not will add ")
     @PutMapping
-    public ResponseEntity<Currency> updateCurrencyByCode(@RequestBody Currency newCurrencyData) {
+    public ResponseEntity<Currency> updateCurrencyByCode(@Valid @RequestBody Currency newCurrencyData) {
         currencyService.updateCurrencyByCode(newCurrencyData);
         return ResponseEntity.ok(currencyService.getCurrencyByCode(newCurrencyData.getCode()));
     }

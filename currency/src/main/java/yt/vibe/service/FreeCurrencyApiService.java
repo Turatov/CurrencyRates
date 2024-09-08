@@ -15,8 +15,6 @@ import yt.vibe.dto.CurrencyAddingRequest;
 import yt.vibe.configuration.PropertiesConfiguration;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -51,14 +49,14 @@ public class FreeCurrencyApiService {
     private void addAllCurrencies(Map<String, Map<String, Double>> currencies) {
         currencies.get("data").forEach((s, stringDoubleMap) -> {
             try {
-                sendPutRequest(new CurrencyAddingRequest(s, stringDoubleMap));
+                sendPutRequestToCurrencyController(new CurrencyAddingRequest(s, stringDoubleMap));
             } catch (JsonProcessingException e) {
                 throw new RuntimeException(e);
             }
         });
     }
 
-    public void sendPutRequest(CurrencyAddingRequest currencyAddingRequest) throws JsonProcessingException {
+    public void sendPutRequestToCurrencyController(CurrencyAddingRequest currencyAddingRequest) throws JsonProcessingException {
         String url = propertiesConfiguration.getPutRequestUri();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
