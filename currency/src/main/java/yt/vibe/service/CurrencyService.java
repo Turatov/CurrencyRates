@@ -1,6 +1,8 @@
 package yt.vibe.service;
 
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import yt.vibe.Currency;
 import yt.vibe.dto.CurrencyAddingRequest;
@@ -32,8 +34,7 @@ public class CurrencyService {
 
     public Currency getCurrencyByCode(String code) {
         Optional<Currency> optionalCurrency = currencyRepository.findByCode(code);
-        System.out.println(optionalCurrency);
-        return optionalCurrency.orElse(new Currency("NULL", 0.0));
+        return optionalCurrency.orElse(null);
     }
 
 

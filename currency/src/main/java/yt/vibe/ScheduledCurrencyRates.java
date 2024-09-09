@@ -11,6 +11,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.Min;
 import java.time.ZonedDateTime;
 
 @Data
@@ -29,7 +30,6 @@ public class ScheduledCurrencyRates {
 
 
     @Schema(description = "Unique identifier of the currency", example = "USD")
-//    @Column(unique = true)
     private String code;
     @Schema(description = "Currency rate ", example = "90.8")
     private Double rate;

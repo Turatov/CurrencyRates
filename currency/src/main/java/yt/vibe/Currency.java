@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 
 @Data
 @Builder
@@ -24,6 +25,7 @@ public class Currency {
     @Column(unique = true)
     private String code;
     @Schema(description = "Currency rate ", example = "90.8")
+    @Min(value = 0, message = "Rate must be positive")
     private Double rate;
 
     public Currency(String code, Double rate) {

@@ -8,6 +8,8 @@ import lombok.Data;
 import lombok.Getter;
 import yt.vibe.Currency;
 
+import javax.validation.constraints.Min;
+
 @Getter
 @Data
 public class CurrencyAddingRequest {
@@ -18,6 +20,7 @@ public class CurrencyAddingRequest {
             @Schema(hidden = true)
             @JsonProperty("code") String code,
             @Schema(hidden = true)
+            @Min(value = 0, message = "Rate must be positive")
             @JsonProperty("rate") Double rate) {
         this.currency = new Currency(code, rate);
     }
