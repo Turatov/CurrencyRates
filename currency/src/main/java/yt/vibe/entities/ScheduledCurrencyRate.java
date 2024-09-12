@@ -1,4 +1,4 @@
-package yt.vibe;
+package yt.vibe.entities;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -11,14 +11,13 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.validation.constraints.Min;
 import java.time.ZonedDateTime;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class ScheduledCurrencyRates {
+public class ScheduledCurrencyRate {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -34,7 +33,7 @@ public class ScheduledCurrencyRates {
     @Schema(description = "Currency rate ", example = "90.8")
     private Double rate;
 
-    public ScheduledCurrencyRates(String code, Double rate, ZonedDateTime datetime) {
+    public ScheduledCurrencyRate(String code, Double rate, ZonedDateTime datetime) {
         this.code = code;
         this.rate = rate;
         this.datetime = datetime;

@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
-import yt.vibe.Currency;
+import yt.vibe.entities.Currency;
 import yt.vibe.dto.CurrencyAddingRequest;
 import yt.vibe.repository.CurrencyRepository;
 

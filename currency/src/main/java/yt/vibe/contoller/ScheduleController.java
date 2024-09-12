@@ -8,7 +8,7 @@ import org.quartz.*;
 import org.quartz.impl.matchers.GroupMatcher;
 import org.springframework.web.bind.annotation.*;
 import yt.vibe.dto.ScheduledCurrencyDTO;
-import yt.vibe.ScheduledCurrencyRates;
+import yt.vibe.entities.ScheduledCurrencyRate;
 import yt.vibe.service.CurrencyUpdateJob;
 import yt.vibe.service.ScheduledCurrencyService;
 
@@ -18,7 +18,7 @@ import java.util.*;
 
 @RestController
 @Slf4j
-@RequestMapping("api/schedule")
+@RequestMapping("api/v1/schedule/admin")
 @AllArgsConstructor
 public class ScheduleController {
 
@@ -46,7 +46,7 @@ public class ScheduleController {
             ZonedDateTime dateTime = scheduledCurrencyDTO.getDatetime();
             Map<String, Double> map = scheduledCurrencyDTO.getData();
             map.forEach((c, k) -> {
-                scheduledCurrencyService.addScheduledCurrency(new ScheduledCurrencyRates(c, k, dateTime));
+                scheduledCurrencyService.addScheduledCurrency(new ScheduledCurrencyRate(c, k, dateTime));
             });
 
             return "Job scheduled successfully for " + startDate.toString();
@@ -57,7 +57,6 @@ public class ScheduleController {
             throw new RuntimeException(e);
         }
     }
-
 
     @Operation(summary = "Get scheduled jobs", description = "Returns list of active jobs")
     @GetMapping("/jobs")
