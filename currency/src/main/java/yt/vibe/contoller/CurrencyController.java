@@ -8,12 +8,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import yt.vibe.Currency;
 import yt.vibe.dto.CurrencyAddingRequest;
 import yt.vibe.service.CurrencyService;
 import yt.vibe.service.FreeCurrencyApiService;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -58,5 +60,11 @@ public class CurrencyController {
     public ResponseEntity<Currency> updateCurrencyByCode(@Valid @RequestBody Currency newCurrencyData) {
         currencyService.updateCurrencyByCode(newCurrencyData);
         return ResponseEntity.ok(currencyService.getCurrencyByCode(newCurrencyData.getCode()));
+    }
+
+    @PostMapping(value = "/upload", consumes = {"multipart/form-data"})
+    public ResponseEntity<Integer> uploadCurrencyRatesUsCVS(@RequestPart("file") MultipartFile file) throws IOException {
+        return ResponseEntity.ok(currencyService.uploadCurrencyRatesUsCVS(file));
+
     }
 }

@@ -1,15 +1,26 @@
 package yt.vibe.service;
 
+import com.opencsv.bean.CsvToBean;
+import com.opencsv.bean.CsvToBeanBuilder;
+import com.opencsv.bean.HeaderColumnNameMappingStrategy;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import yt.vibe.Currency;
 import yt.vibe.dto.CurrencyAddingRequest;
+import yt.vibe.dto.CurrencyRateCsvRepresentation;
 import yt.vibe.repository.CurrencyRepository;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -45,5 +56,27 @@ public class CurrencyService {
     public void updateCurrencyByCode(Currency newCurrency) {
         currencyRepository.saveOrUpdateCurrency(newCurrency.getCode(), newCurrency.getRate());
     }
+
+    public Integer uploadCurrencyRatesUsCVS(MultipartFile file) throws IOException {
+        Set<Currency> currencies = parseCsv(file);
+        currencyRepository.saveAll(currencies);
+        return currencies.size();
+    }
+
+    private Set<Currency> parseCsv(MultipartFile file) throws IOException {
+        Reader reader = new BufferedReader((new InputStreamReader(file.getInputStream())));
+        HeaderColumnNameMappingStrategy<CurrencyRateCsvRepresentation> MappingStrategy = new HeaderColumnNameMappingStrategy<>();
+        MappingStrategy.setType(CurrencyRateCsvRepresentation.class);
+        CsvToBean<CurrencyRateCsvRepresentation> csvToBean = new CsvToBeanBuilder<CurrencyRateCsvRepresentation>(reader)
+                .withMappingStrategy(MappingStrategy)
+                .withIgnoreEmptyLine(true)
+                .withIgnoreLeadingWhiteSpace(true)
+                .build();
+        return csvToBean.parse()
+                .stream()
+                .map(csvLine -> new Currency(csvLine.getCode(), csvLine.getRate()))
+                .collect(Collectors.toSet());
+    }
 }
+
 
