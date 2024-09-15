@@ -2,11 +2,10 @@ package yt.vibe.dto;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonRawValue;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.Getter;
-import yt.vibe.Currency;
+import yt.vibe.entities.Currency;
 
 import javax.validation.constraints.Min;
 

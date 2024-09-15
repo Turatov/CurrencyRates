@@ -1,4 +1,4 @@
-package yt.vibe;
+package yt.vibe.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
