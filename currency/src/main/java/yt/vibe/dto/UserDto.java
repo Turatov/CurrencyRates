@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 @Data
-public class UserDTO {
+public class UserDto {
     private String username;
     private String password;
     @Schema(description = "User authority ('USER' || 'ADMIN' ", example = "ADMIN")

@@ -23,6 +23,7 @@ public class CurrencyUpdateJob implements Job {
     @Override
     public void execute(JobExecutionContext context) throws JobExecutionException {
         assert scheduledCurrencyService != null;
-        scheduledCurrencyService.syncWithMainTable(context.getTrigger().getStartTime().toInstant().atZone(ZoneId.systemDefault()));
+        scheduledCurrencyService.syncWithMainTable(context.getTrigger()
+                .getStartTime().toInstant().atZone(ZoneId.systemDefault()));
     }
 }

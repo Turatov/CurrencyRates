@@ -11,11 +11,11 @@ import javax.validation.constraints.Min;
 
 @Getter
 @Data
-public class CurrencyAddingRequest {
+public class CurrencyDto {
     private final Currency currency;
 
     @JsonCreator
-    public CurrencyAddingRequest(
+    public CurrencyDto(
             @Schema(hidden = true)
             @JsonProperty("code") String code,
             @Schema(hidden = true)

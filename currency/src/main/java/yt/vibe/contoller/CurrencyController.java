@@ -10,14 +10,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import yt.vibe.entities.Currency;
-import yt.vibe.dto.CurrencyAddingRequest;
+import yt.vibe.dto.CurrencyDto;
 import yt.vibe.service.CurrencyService;
 import yt.vibe.service.FreeCurrencyApiService;
 
 import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @RestController
@@ -30,7 +29,7 @@ public class CurrencyController {
 
     @Operation(summary = "Add new currency")
     @PostMapping("/admin")
-    public ResponseEntity<String> addCurrency(@Valid @RequestBody CurrencyAddingRequest request) {
+    public ResponseEntity<String> addCurrency(@Valid @RequestBody CurrencyDto request) {
         try {
             currencyService.addCurrency(request);
             return ResponseEntity.status(HttpStatus.CREATED).body("Currency added successfully");
@@ -45,7 +44,8 @@ public class CurrencyController {
         return currencyService.getAllCurrencies();
     }
 
-    @Operation(summary = "Get rates from remote api", description = "First update currency table with rates from remote api and return list of rates")
+    @Operation(summary = "Get rates from remote api",
+            description = "First update currency table with rates from remote api and return list of rates")
     @GetMapping("/admin")
     public List<Currency> getRatesFromRemoteApi() throws JsonProcessingException {
         freeCurrencyApiService.getRates();
@@ -55,7 +55,8 @@ public class CurrencyController {
 
     @Operation(summary = "Get a currency by code", description = "Returns a currency by code ")
     @GetMapping("/{code}")
-    public ResponseEntity<Currency> getCurrencyByCode(@Parameter(description = "Currency code to be  retrieved", example = "USD") @PathVariable String code) {
+    public ResponseEntity<Currency> getCurrencyByCode(@Parameter(description = "Currency code to be  retrieved",
+            example = "USD") @PathVariable String code) {
         Optional<Currency> currencyByCode = Optional.ofNullable(currencyService.getCurrencyByCode(code));
         return currencyByCode.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
@@ -67,10 +68,11 @@ public class CurrencyController {
         return ResponseEntity.ok(currencyService.getCurrencyByCode(newCurrencyData.getCode()));
     }
 
-    @Operation(summary = "Upload currency rates from CVS file", description = "Import  currency rates from CVS file and return number of imported lines ")
+    @Operation(summary = "Upload currency rates from CVS file",
+            description = "Import  currency rates from CVS file and return number of imported lines ")
     @PostMapping(value = "admin/upload", consumes = {"multipart/form-data"})
-    public ResponseEntity<Integer> uploadCurrencyRatesUsCVS(@RequestPart("file") MultipartFile file) throws IOException {
-        return ResponseEntity.ok(currencyService.uploadCurrencyRatesUsCVS(file));
-
+    public ResponseEntity<Integer> uploadCurrencyRatesUsCvs(@RequestPart("file")
+                                                                MultipartFile file) throws IOException {
+        return ResponseEntity.ok(currencyService.uploadCurrencyRatesUsCvs(file));
     }
 }

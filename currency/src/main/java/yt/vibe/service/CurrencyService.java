@@ -7,7 +7,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import yt.vibe.entities.Currency;
-import yt.vibe.dto.CurrencyAddingRequest;
+import yt.vibe.dto.CurrencyDto;
 import yt.vibe.dto.CurrencyRateCsvRepresentation;
 import yt.vibe.repository.CurrencyRepository;
 
@@ -25,19 +25,22 @@ import java.util.stream.Collectors;
 public class CurrencyService {
     private final CurrencyRepository currencyRepository;
 
-    public void addCurrency(CurrencyAddingRequest currencyAddingRequest) {
-        Optional<Currency> optionalCurrency = currencyRepository.findByCode(currencyAddingRequest.getCurrency().getCode());
+    public void addCurrency(CurrencyDto currencyDto) {
+        Optional<Currency> optionalCurrency = currencyRepository.findByCode(currencyDto.getCurrency().getCode());
         optionalCurrency.ifPresent(
-                currency -> {
-                    if (currencyAddingRequest.getCurrency().getCode().equals(currency.getCode())) {
-                        throw new IllegalStateException(String.format("Currency with this code [%s] is already exist", currencyAddingRequest.getCurrency().getCode()));
-                    } else
-                        return;
+            currency -> {
+                if (currencyDto.getCurrency().getCode().equals(currency.getCode())) {
+                    throw new IllegalStateException(
+                                String.format("Currency with this code [%s] is already exist",
+                                        currencyDto.getCurrency().getCode()));
+                } else {
+                    return;
                 }
+            }
         );
         currencyRepository.save(Currency.builder()
-                .code(currencyAddingRequest.getCurrency().getCode())
-                .rate(currencyAddingRequest.getCurrency().getRate())
+                .code(currencyDto.getCurrency().getCode())
+                .rate(currencyDto.getCurrency().getRate())
                 .build());
     }
 
@@ -55,7 +58,7 @@ public class CurrencyService {
         currencyRepository.saveOrUpdateCurrency(newCurrency.getCode(), newCurrency.getRate());
     }
 
-    public Integer uploadCurrencyRatesUsCVS(MultipartFile file) throws IOException {
+    public Integer uploadCurrencyRatesUsCvs(MultipartFile file) throws IOException {
         Set<Currency> currencies = parseCsv(file);
         currencyRepository.saveAll(currencies);
         return currencies.size();
@@ -63,10 +66,11 @@ public class CurrencyService {
 
     private Set<Currency> parseCsv(MultipartFile file) throws IOException {
         Reader reader = new BufferedReader((new InputStreamReader(file.getInputStream())));
-        HeaderColumnNameMappingStrategy<CurrencyRateCsvRepresentation> MappingStrategy = new HeaderColumnNameMappingStrategy<>();
-        MappingStrategy.setType(CurrencyRateCsvRepresentation.class);
+        HeaderColumnNameMappingStrategy<CurrencyRateCsvRepresentation>
+                mappingStrategy = new HeaderColumnNameMappingStrategy<>();
+        mappingStrategy.setType(CurrencyRateCsvRepresentation.class);
         CsvToBean<CurrencyRateCsvRepresentation> csvToBean = new CsvToBeanBuilder<CurrencyRateCsvRepresentation>(reader)
-                .withMappingStrategy(MappingStrategy)
+                .withMappingStrategy(mappingStrategy)
                 .withIgnoreEmptyLine(true)
                 .withIgnoreLeadingWhiteSpace(true)
                 .build();

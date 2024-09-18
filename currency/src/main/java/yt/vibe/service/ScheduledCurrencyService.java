@@ -1,17 +1,11 @@
 package yt.vibe.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import yt.vibe.entities.Currency;
 import yt.vibe.entities.ScheduledCurrencyRate;
-import yt.vibe.configuration.PropertiesConfiguration;
-import yt.vibe.dto.CurrencyAddingRequest;
 import yt.vibe.repository.ScheduleRepository;
 
 import java.time.ZonedDateTime;
@@ -36,7 +30,8 @@ public class ScheduledCurrencyService {
 
 
     public void syncWithMainTable(ZonedDateTime dateTime) {
-        List<ScheduledCurrencyRate> allExistedScheduledCurrencyRates = scheduleRepository.findBydatetimeEquals(dateTime);
+        List<ScheduledCurrencyRate> allExistedScheduledCurrencyRates =
+                scheduleRepository.findBydatetimeEquals(dateTime);
         List<Future<String>> futures = new ArrayList<>();
         if (!allExistedScheduledCurrencyRates.isEmpty()) {
             allExistedScheduledCurrencyRates.forEach(scRate -> {
