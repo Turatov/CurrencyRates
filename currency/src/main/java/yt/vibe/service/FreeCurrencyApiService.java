@@ -4,26 +4,18 @@ package yt.vibe.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.*;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import yt.vibe.entities.Currency;
-import yt.vibe.dto.CurrencyAddingRequest;
 import yt.vibe.configuration.PropertiesConfiguration;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -42,7 +34,8 @@ public class FreeCurrencyApiService {
 
 
     @Autowired
-    public FreeCurrencyApiService(PropertiesConfiguration propertiesConfiguration, RestTemplate restTemplate, CurrencyService currencyService) {
+    public FreeCurrencyApiService(PropertiesConfiguration propertiesConfiguration,
+                                  RestTemplate restTemplate, CurrencyService currencyService) {
         this.propertiesConfiguration = propertiesConfiguration;
         this.restTemplate = restTemplate;
         this.currencyService = currencyService;
@@ -50,10 +43,11 @@ public class FreeCurrencyApiService {
 
     public void getRates() throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
-        String jSon = restTemplate.getForObject(propertiesConfiguration.getBaseUrl(), String.class);
+        String rawCurrencyRatesJson = restTemplate.getForObject(propertiesConfiguration.getBaseUrl(), String.class);
         try {
-            Map<String, Map<String, Double>> allCurrencyRates = objectMapper.readValue(jSon, new TypeReference<Map<String, Map<String, Double>>>() {
-            });
+            Map<String, Map<String, Double>> allCurrencyRates = objectMapper.readValue(rawCurrencyRatesJson,
+                    new TypeReference<Map<String, Map<String, Double>>>() {
+                });
             addAllCurrencies(allCurrencyRates);
         } catch (IOException e) {
             log.info(e.getMessage());

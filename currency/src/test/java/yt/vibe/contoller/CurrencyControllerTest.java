@@ -7,8 +7,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -17,7 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import yt.vibe.entities.Currency;
-import yt.vibe.dto.CurrencyAddingRequest;
+import yt.vibe.dto.CurrencyDto;
 import yt.vibe.service.CurrencyService;
 
 import yt.vibe.service.FreeCurrencyApiService;
@@ -60,7 +58,7 @@ class CurrencyControllerTest {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         // Given
         Currency currency = new Currency("EUR", 100.1);
-        CurrencyAddingRequest request = new CurrencyAddingRequest(currency.getCode(), currency.getRate());
+        CurrencyDto request = new CurrencyDto(currency.getCode(), currency.getRate());
         String writtenValueAsString = objectMapper.writeValueAsString(request);
         mockMvc.perform(post("/api/v1/currencies/admin")
                         .contentType(MediaType.APPLICATION_JSON)

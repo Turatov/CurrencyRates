@@ -7,7 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.quartz.*;
 import org.quartz.impl.matchers.GroupMatcher;
 import org.springframework.web.bind.annotation.*;
-import yt.vibe.dto.ScheduledCurrencyDTO;
+import yt.vibe.dto.ScheduledCurrencyDto;
 import yt.vibe.entities.ScheduledCurrencyRate;
 import yt.vibe.service.CurrencyUpdateJob;
 import yt.vibe.service.ScheduledCurrencyService;
@@ -25,28 +25,29 @@ public class ScheduleController {
     private Scheduler scheduler;
     private ScheduledCurrencyService scheduledCurrencyService;
 
-    @Operation(summary = "Schedule currency rate", description = "Send json with new rate and datetime to schedule rates")
+    @Operation(summary = "Schedule currency rate",
+            description = "Send json with new rate and datetime to schedule rates")
     @PostMapping
-    public String scheduleJob(@RequestBody ScheduledCurrencyDTO scheduledCurrencyDTO) throws Exception {
+    public String scheduleJob(@RequestBody ScheduledCurrencyDto scheduledCurrencyDto) throws Exception {
         try {
-            Date startDate = Date.from(scheduledCurrencyDTO.getDatetime().toInstant());
+            Date startDate = Date.from(scheduledCurrencyDto.getDatetime().toInstant());
 
             JobDetail jobDetail = JobBuilder.newJob(CurrencyUpdateJob.class)
-                    .withIdentity(scheduledCurrencyDTO.getJobName(), "group1")
+                    .withIdentity(scheduledCurrencyDto.getJobName(), "group1")
                     .build();
 
             Trigger trigger = TriggerBuilder.newTrigger()
-                    .withIdentity(scheduledCurrencyDTO.getTriggerName(), "group1")
+                    .withIdentity(scheduledCurrencyDto.getTriggerName(), "group1")
                     .startAt(startDate)
                     .withSchedule(SimpleScheduleBuilder.simpleSchedule()
                             .withMisfireHandlingInstructionFireNow())
                     .build();
 
             scheduler.scheduleJob(jobDetail, trigger);
-            ZonedDateTime dateTime = scheduledCurrencyDTO.getDatetime();
-            Map<String, Double> map = scheduledCurrencyDTO.getData();
-            map.forEach((c, k) -> {
-                scheduledCurrencyService.addScheduledCurrency(new ScheduledCurrencyRate(c, k, dateTime));
+            ZonedDateTime dateTime = scheduledCurrencyDto.getDatetime();
+            Map<String, Double> map = scheduledCurrencyDto.getData();
+            map.forEach((code, rate) -> {
+                scheduledCurrencyService.addScheduledCurrency(new ScheduledCurrencyRate(code, rate, dateTime));
             });
 
             return "Job scheduled successfully for " + startDate.toString();

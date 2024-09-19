@@ -1,20 +1,16 @@
 package yt.vibe.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.Getter;
 
 import java.time.ZonedDateTime;
-import java.util.HashMap;
 import java.util.Map;
 
 @Getter
 @Data
-public class ScheduledCurrencyDTO {
-
-
+public class ScheduledCurrencyDto {
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
     @Schema(description = "Trigger time to schedule with time zone", example = "2024-08-08T19:37:00.259Z")
     private ZonedDateTime datetime;

@@ -1,20 +1,17 @@
 package yt.vibe.contoller;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import yt.vibe.dto.UserDTO;
+import yt.vibe.dto.UserDto;
 import yt.vibe.entities.Authority;
 import yt.vibe.entities.User;
 import yt.vibe.service.UserService;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Controller
 @RestController
@@ -24,16 +21,19 @@ public class AuthController {
     @Autowired
     UserService userService;
 
-    @Operation(summary = "Creat new user with role", description = "if in request reference code exist role by default will be ADMIN if not USER , after authentication can change it")
+    @Operation(summary = "Creat new user with role",
+            description = "if in request reference code exist role by default will be ADMIN if not USER , " +
+                    "after authentication can change it")
     @PostMapping()
-    private ResponseEntity<String> creatNewUser(@RequestBody UserDTO user) {
+    private ResponseEntity<String> creatNewUser(@RequestBody UserDto user) {
         try {
-            userService.createNewUserWithRoles(user);
-            return ResponseEntity.created(ServletUriComponentsBuilder.
-                            fromCurrentRequest().path("/api/auth/users/{userName}").
-                            buildAndExpand(user.getUsername()).
-                            toUri()).
-                    body("User created successfully");
+            userService
+                    .createNewUserWithRoles(user);
+            return ResponseEntity.created(ServletUriComponentsBuilder
+                            .fromCurrentRequest().path("/api/auth/users/{userName}")
+                                    .buildAndExpand(user.getUsername())
+                                            .toUri())
+                            .body("User created successfully");
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

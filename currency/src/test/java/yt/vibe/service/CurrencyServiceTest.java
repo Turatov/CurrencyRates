@@ -6,7 +6,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 import yt.vibe.entities.Currency;
-import yt.vibe.dto.CurrencyAddingRequest;
+import yt.vibe.dto.CurrencyDto;
 import yt.vibe.repository.CurrencyRepository;
 
 import java.util.ArrayList;
@@ -41,9 +41,9 @@ class CurrencyServiceTest {
     void itShouldAddCurrency() {
         // Given
         Currency currency = new Currency("USD", 20.2);
-        CurrencyAddingRequest currencyAddingRequest = new CurrencyAddingRequest(currency.getCode(), currency.getRate());
+        CurrencyDto currencyDto = new CurrencyDto(currency.getCode(), currency.getRate());
         // When
-        underTest.addCurrency(currencyAddingRequest);
+        underTest.addCurrency(currencyDto);
         // Then
         then(currencyRepository).should().save(currencyArgumentCaptor.capture());
         Currency currencyArgumentCaptorValue = currencyArgumentCaptor.getValue();
@@ -54,13 +54,14 @@ class CurrencyServiceTest {
     void itShouldShouldNotAddCurrencyThrowException() {
         // Given
         Currency currency = new Currency("USD", 20.2);
-        CurrencyAddingRequest currencyAddingRequest = new CurrencyAddingRequest(currency.getCode(), currency.getRate());
-        given(currencyRepository.findByCode(currencyAddingRequest.getCurrency().getCode())).willReturn(Optional.of(currency));
+        CurrencyDto currencyDto = new CurrencyDto(currency.getCode(), currency.getRate());
+        given(currencyRepository.findByCode(currencyDto.getCurrency().getCode())).willReturn(Optional.of(currency));
         // When
         // Then
-        assertThatThrownBy(() -> underTest.addCurrency(currencyAddingRequest))
+        assertThatThrownBy(() -> underTest.addCurrency(currencyDto))
                 .isInstanceOf(IllegalStateException.class)
-                .hasMessageContaining(String.format("Currency with this code [%s] is already exist", currencyAddingRequest.getCurrency().getCode()));
+                .hasMessageContaining(String.format("Currency with this code [%s] is already exist",
+                        currencyDto.getCurrency().getCode()));
 
     }
 
