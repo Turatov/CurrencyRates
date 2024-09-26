@@ -1,0 +1,16 @@
+{
+  "name": "currencydb-connector",
+  "config": {
+    "connector.class": "io.debezium.connector.postgresql.PostgresConnector",
+    "plugin.name": "pgoutput",
+    "database.hostname": "postgres",
+    "database.port": "5432",
+    "database.user": "postgres",
+    "database.password": "postgres",
+    "database.dbname": "currency",
+    "database.server.name": "postgres",
+    "schema.include.list": "public",
+    "table.include.list": "public.currency",
+    "topic.prefix": "debezium_postgres"
+  }
+}
