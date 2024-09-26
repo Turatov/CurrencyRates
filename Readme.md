@@ -21,3 +21,14 @@ Docker run application
 docker-compose up --build -d
 docker-compose stop
 ```
+
+## Kafka & Debezium
+
+ALTER TABLE public.currency REPLICA IDENTITY FULL;
+
+postgres  wal_level = logical
+
+join telegram channel to see currencies rate updates
+```
+https://t.me/CBRates
+```
