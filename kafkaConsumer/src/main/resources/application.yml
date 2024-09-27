@@ -1,0 +1,21 @@
+server:
+  port: 8088
+spring:
+  kafka:
+    consumer:
+      bootstrap-servers: localhost:19092
+      group-id: currency-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: '*'
+        spring.json.value.default.type: yt.vibe.representation.CurrencyChangeEvent
+
+telegram:
+  bot:
+    token: "7303481394:AAEZdKJbUfKc-zIy0-2cC-u27v6ruG5dyAg"
+  chat:
+    id: "-1002185791199"
+  api:
+    url: "https://api.telegram.org/bot"
