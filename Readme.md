@@ -33,3 +33,8 @@ join telegram channel to see currencies rate updates
 ```
 https://t.me/CBRates
 ```
+
+Send debezium.json as a post request to the debezium to add a connector
+```
+localhost:8083/connectors/
+```

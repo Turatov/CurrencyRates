@@ -16,7 +16,7 @@ public class TelegramApiService {
     @Value("${telegram.bot.token}")
     private String botToken;
     @Value("${telegram.chat.id}")
-    private String chat_id;
+    private String chatId;
     @Value("${telegram.api.url}")
     private String telegramUrl;
 
@@ -25,19 +25,20 @@ public class TelegramApiService {
     public void sendMessage(CurrencyChangeEvent event) {
         String url = telegramUrl + botToken + "/sendMessage";
         Map<String, String> params = new HashMap<>();
-        params.put("chat_id", chat_id);
+        params.put("chat_id", chatId);
         params.put("text", buildTelegramMessage(event));
         restTemplate.postForObject(url, params, String.class);
     }
 
-    private String buildTelegramMessage(CurrencyChangeEvent event){
+    private String buildTelegramMessage(CurrencyChangeEvent event) {
         StringBuffer sb = new StringBuffer();
         if (event.getBefore() != null) {
             sb.append(String.format("Курс \"%s\" поменялся \n", event.getBefore().getCode()));
             sb.append("До изменения : ").append(event.getBefore().getRate()).append("\n");
             sb.append("Сейчас : ").append(event.getAfter().getRate()).append("\n");
-        }else {
-            sb.append(String.format("Добавлена новая валюта \"%s\" курс к доллару [USD]: %s " ,event.getAfter().getCode(),event.getAfter().getRate()));
+        } else {
+            sb.append(String.format("Добавлена новая валюта \"%s\" курс к доллару [USD]: %s " ,
+                    event.getAfter().getCode(),event.getAfter().getRate()));
         }
         return sb.toString();
     }

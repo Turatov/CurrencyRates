@@ -13,11 +13,11 @@ import java.util.concurrent.Executors;
 @Service
 @Slf4j
 public class CurrencyConsumer {
-
     @Autowired
     TelegramApiService telegramApiService;
+
     @KafkaListener(topics = "debezium_postgres.public.currency", groupId = "currency-group")
     public void listen(CurrencyChangeEvent event) {
-            telegramApiService.sendMessage(event);
+        telegramApiService.sendMessage(event);
     }
 }

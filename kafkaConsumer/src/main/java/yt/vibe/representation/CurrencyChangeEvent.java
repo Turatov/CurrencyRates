@@ -11,5 +11,5 @@ public class CurrencyChangeEvent {
     private CurrencyData before;
     private CurrencyData after;
     private String op;
-    private Long ts_ms;
+    private Long timeStampMs;
 }
